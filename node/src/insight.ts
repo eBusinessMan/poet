@@ -1,6 +1,6 @@
 import * as socketIO from 'socket.io-client'
 import * as fetch from 'isomorphic-fetch'
-import { POET, VERSION } from 'poet-js';
+import { BARD, POET, VERSION } from 'poet-js';
 import { InsightClient as Client, ApiMode } from 'insight-client-js'
 const bitcore = require('bitcore-lib')
 
@@ -108,6 +108,7 @@ export default class PoetInsightListener {
   }
 
   scanBitcoreBlock(block: BitcoinBlock, height: number) {
+    console.log('scanBitcoreBlock', height)
     const txs = block.transactions.map((tx: any, index: number): BlockMetadata | null => {
       const poetData = this.doesBitcoreTxContainPoetInfo(tx)
       if (!poetData) {
@@ -130,13 +131,22 @@ export default class PoetInsightListener {
     return blockInfo
   }
 
-  doesBitcoreTxContainPoetInfo(tx: any): BlockMetadata {
-    const check = function(script: any, index: number) {
+  isAcceptedPoetVersion = (version: Buffer) => {
+    const minimumVersion = new Buffer([0, 0, 0, 2])
+    return Buffer.compare(version, minimumVersion) >= 0
+  }
+
+  doesBitcoreTxContainPoetInfo = (tx: any): BlockMetadata => {
+    const check = (script: any, index: number) => {
       if (script.classify() !== bitcore.Script.types.DATA_OUT)
         return
       const data: Buffer = script.getData()
-      return data.indexOf(POET) === 0
-          && data.indexOf(VERSION) === 4
+
+      // TODO: We currently need to accept both BARD and POET txs.
+      // Should move everything important to POET in the future,
+      // and only use one of either, by configuration.
+      return ((data.indexOf(POET) === 0 || data.indexOf(BARD) === 0)
+          && this.isAcceptedPoetVersion(data.slice(4, 8)))
           ? {
             transactionHash : tx.hash,
             outputIndex     : index,
