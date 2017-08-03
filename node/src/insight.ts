@@ -108,7 +108,6 @@ export default class PoetInsightListener {
   }
 
   scanBitcoreBlock(block: BitcoinBlock, height: number) {
-    console.log('scanBitcoreBlock', height)
     const txs = block.transactions.map((tx: any, index: number): BlockMetadata | null => {
       const poetData = this.doesBitcoreTxContainPoetInfo(tx)
       if (!poetData) {
