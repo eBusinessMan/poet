@@ -117,7 +117,7 @@ services:
       context: ..
       dockerfile: ./Docker/web-poet-js-remote.dockerfile
     environment:
-      - AUTH_HOST="wss://auth.po.et"
+      - AUTH_HOST=wss://auth.po.et
     volumes:
       - ../web/src:/web/src
     networks:

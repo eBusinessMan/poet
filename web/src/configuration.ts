@@ -9,7 +9,7 @@ export const Configuration = {
   api: {
     explorer: '/api/explorer',
     user: '/api/user',
-    auth: 'ws://localhost:5000',
+    auth: process.env.AUTH_HOST || 'ws://localhost:5000',
     mockApp: '/api/mockApp',
     blockchain: 'https://blockchain.info'
   },
