@@ -9,6 +9,8 @@ COPY ./web/tsconfig.json /web
 COPY ./web/webpack.config.js /web
 COPY ./web/devServer.js /web
 
+RUN sed -i -E 's/ws\:\/\/localhost\:5000/wss\:\/\/auth.po.et/g' ./web/src/configuration.ts
+
 RUN npm i
 
 CMD [ "npm", "start" ]
