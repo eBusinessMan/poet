@@ -55,7 +55,7 @@ export class TorrentSystem {
       hash
     )
 
-    console.log('Downloading', hash)
+    console.log('Downloading', hash, this.getPathInStorageFolder(hash))
     download.subscribeOnCompleted(async () => {
       console.log('Downladed', hash)
       try {

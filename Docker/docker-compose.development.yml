@@ -118,7 +118,7 @@ services:
   web:
     build:
       context: ..
-      dockerfile: ./Docker/web-poet-js-remote.dockerfile
+      dockerfile: ./Docker/web-poet-js-local.dockerfile
     volumes:
       - ../web/src:/web/src
     networks:
